@@ -1,9 +1,11 @@
-# Rust Docker
+# Docker
 
-## Build and test
-- `docker build -t rust-stakeholder .`
-- `docker run --rm rust-stakeholder --list-values`
+The repo builds a static Linux binary and ships it in a distroless runtime image.
 
-## Rationale
-- The image compiles and tests the Rust baseline before packaging the runtime binary.
-- Docker is the reproducible Linux gate; host and CI matrices still cover native OS behavior.
+## Commands
+- `docker build -t go-stakeholder .`
+- `docker run --rm go-stakeholder --list-values`
+
+## CI intent
+- Build and test in a Go builder image.
+- Smoke the runtime image with the CLI contract surface.

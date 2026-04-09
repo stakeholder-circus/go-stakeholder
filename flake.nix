@@ -1,37 +1,31 @@
 {
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-24.11";
-    flake-utils.url = "github:numtide/flake-utils";
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
+  description = "stakeholder-circus go-stakeholder";
 
-  outputs = {
-    self,
-    nixpkgs,
-    fenix,
-    flake-utils,
-  }:
-    flake-utils.lib.eachDefaultSystem (
-      system: let
-        pkgs = nixpkgs.legacyPackages.${system};
-        fenix_pkgs = fenix.packages.${system};
-      in {
-        nixpkgs.overlays = [fenix.overlays.default];
-        devShells.default = pkgs.mkShell {
-          nativeBuildInputs = [pkgs.pkg-config pkgs.opencv];
-          packages = [
-            (
-              fenix_pkgs.fromToolchainFile {
-                file = ./rust-toolchain.toml;
-                sha256 = "sha256-AJ6LX/Q/Er9kS15bn9iflkUwcgYqRQxiOIL2ToVAXaU=";
-              }
-            )
-            pkgs.rust-analyzer
-          ];
-        };
-      }
-    );
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+  outputs = { self, nixpkgs }:
+    let
+      systems = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in {
+      devShells = forAllSystems (system:
+        let pkgs = import nixpkgs { inherit system; };
+        in {
+          default = pkgs.mkShell {
+            packages = with pkgs; [ go golangci-lint docker ];
+          };
+        });
+      apps = forAllSystems (system:
+        let pkgs = import nixpkgs { inherit system; };
+            mk = name: text: {
+              type = "app";
+              program = "${pkgs.writeShellScript name text}";
+            };
+        in {
+          build = mk "build" ''go build ./...'';
+          test = mk "test" ''go test ./...'';
+          check = mk "check" ''files=$(find . -name '*.go' -not -path './.git/*' -print); if [ -n "$files" ] && [ -n "$(gofmt -l $files)" ]; then gofmt -l $files; exit 1; fi; go vet ./...; go build ./...; go test ./...; golangci-lint run'';
+          format = mk "format" ''files=$(find . -name '*.go' -not -path './.git/*' -print); if [ -n "$files" ] && [ -n "$(gofmt -l $files)" ]; then gofmt -l $files; exit 1; fi'';
+        });
+    };
 }

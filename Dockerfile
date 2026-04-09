@@ -1,11 +1,9 @@
-FROM rust:1-bookworm AS build
-WORKDIR /workspace
-COPY Cargo.toml Cargo.lock ./
-COPY src ./src
-RUN cargo test && cargo build --release
+FROM golang:1.22 AS build
+WORKDIR /src
+COPY . .
+RUN go test ./...
+RUN go build -o /out/stakeholder ./cmd/stakeholder
 
-FROM debian:bookworm-slim
-WORKDIR /app
-COPY --from=build /workspace/target/release/rust-stakeholder /usr/local/bin/rust-stakeholder
-ENTRYPOINT ["rust-stakeholder"]
-CMD ["--list-values"]
+FROM gcr.io/distroless/static-debian12
+COPY --from=build /out/stakeholder /stakeholder
+ENTRYPOINT ["/stakeholder"]

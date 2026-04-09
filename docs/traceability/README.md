@@ -1,5 +1,14 @@
-# Rust Traceability
+# Traceability
 
-- Rust is the source-of-truth side of the rewrite program.
-- Behavioral changes here must be mirrored into `stakeholder-core` traceability, docs, and downstream packets.
-- Downstream repos should cite Rust file paths and the corresponding `stakeholder-core` rows when porting behavior.
+Map every future behavior change to audited Rust lines first.
+
+## Current follower foundation
+- Dedicated renderers now exist for the widened classic-six tranche:
+  - `code_analyzer`
+  - `data_processing`
+  - `jargon`
+  - `metrics`
+  - `network_activity`
+  - `system_monitoring`
+- `agent_workflows` remains the separate dedicated modern-core smoke path.
+- All other families stay on grouped fallback renderers until their tranche lands.

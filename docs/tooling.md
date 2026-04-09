@@ -1,19 +1,13 @@
-# Rust Tooling
+# Tooling
 
-## Commands
-- `cargo fmt`
-- `cargo clippy -- -D warnings`
-- `cargo build`
-- `cargo test`
-- `docker build -t rust-stakeholder .`
-- `docker run --rm rust-stakeholder --list-values`
-
-## Extended local checks
-- `cargo nextest run`
-- `cargo audit`
-- `cargo deny check`
-- `cargo udeps`
+## Standard commands
+- `gofmt -l $(find . -name '*.go' -not -path './.git/*')`
+- `golangci-lint run`
+- `go build ./...`
+- `go test ./...`
+- `docker build -t go-stakeholder .`
+- `docker run --rm go-stakeholder --list-values`
 
 ## Notes
-- The Docker path is the reproducible Linux baseline.
-- Native CI should still cover macOS and Windows semantics.
+- `gofmt` is the formatter gate.
+- `golangci-lint` is the primary linter; the workflow installs it explicitly.
