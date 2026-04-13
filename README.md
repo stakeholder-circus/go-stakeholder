@@ -2,17 +2,17 @@
 > This repository is part of a Codex-assisted rewrite experiment. All changes are manually reviewed, a human remains in the loop, and missing behavior is tracked explicitly rather than hidden. The project exists for fun, research, language learning, AI agent workflow/planning, interop experiments, and code review testing.
 # go-stakeholder
 
-Go widened classic-six follower for the stakeholder rewrite.
+Go follower implementation through the modern-core wave for the stakeholder rewrite.
 
 ## Implemented surface
 - Go modules with standard-library-first runtime code.
 - Thin CLI entrypoint in `cmd/stakeholder`.
 - Typed config and value enums for dev type, jargon, complexity, and output format.
 - Seeded scheduler with current family-selection rules.
-- Registry-based renderer dispatch with dedicated classic-six smoke renderers and grouped fallback renderers for the remaining families.
+- Registry-based renderer dispatch with dedicated classic-six and modern-core renderers plus grouped fallback renderers for the remaining families.
 - Normalized JSON session output.
 - Full 2026+ family registry for `--list-values`.
-- Dedicated smoke evidence for `code_analyzer`, `data_processing`, `jargon`, `metrics`, `network_activity`, `system_monitoring`, and `agent_workflows`.
+- Dedicated evidence for `code_analyzer`, `data_processing`, `jargon`, `metrics`, `network_activity`, `system_monitoring`, `agent_workflows`, `platform_engineering`, `observability_ai_runtime`, `delivery_preview_ops`, and `supply_chain_security`.
 - Experimental provider flags are parsed consistently and fail fast with an explicit not-implemented message.
 
 ## Commands

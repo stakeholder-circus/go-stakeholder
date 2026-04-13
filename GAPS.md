@@ -8,14 +8,19 @@
 - Seeded scheduler and registry-based renderer dispatch are implemented.
 - Normalized JSON output is implemented.
 - The full 2026+ family registry is exposed through `--list-values`.
-- Dedicated smoke evidence exists for the classic-six widening tranche:
+- Dedicated evidence exists for the classic-six tranche:
   - `code_analyzer`
   - `data_processing`
   - `jargon`
   - `metrics`
   - `network_activity`
   - `system_monitoring`
-- `agent_workflows` remains dedicated.
+- Dedicated evidence exists for the modern-core tranche:
+  - `agent_workflows`
+  - `platform_engineering`
+  - `observability_ai_runtime`
+  - `delivery_preview_ops`
+  - `supply_chain_security`
 
 ## Remaining blocker
 - Experimental provider flags are parsed consistently, but the experimental provider runtime is still intentionally not implemented in this follower foundation.

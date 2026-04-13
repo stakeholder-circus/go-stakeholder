@@ -8,13 +8,17 @@ import (
 type rendererFunc func(RenderContext) RenderResult
 
 var dedicatedRenderers = map[Family]rendererFunc{
-	FamilyAgentWorkflows:   renderAgentWorkflows,
-	FamilyCodeAnalyzer:     renderCodeAnalyzer,
-	FamilyDataProcessing:   renderDataProcessing,
-	FamilyJargon:           renderJargon,
-	FamilyMetrics:          renderMetrics,
-	FamilyNetworkActivity:  renderNetworkActivity,
-	FamilySystemMonitoring: renderSystemMonitoring,
+	FamilyAgentWorkflows:         renderAgentWorkflows,
+	FamilyCodeAnalyzer:           renderCodeAnalyzer,
+	FamilyDataProcessing:         renderDataProcessing,
+	FamilyJargon:                 renderJargon,
+	FamilyMetrics:                renderMetrics,
+	FamilyNetworkActivity:        renderNetworkActivity,
+	FamilySystemMonitoring:       renderSystemMonitoring,
+	FamilyPlatformEngineering:    renderPlatformEngineering,
+	FamilyObservabilityAIRuntime: renderObservabilityAIRuntime,
+	FamilyDeliveryPreviewOps:     renderDeliveryPreviewOps,
+	FamilySupplyChainSecurity:    renderSupplyChainSecurity,
 }
 
 var groupedRenderers = map[FamilyGroup]rendererFunc{
@@ -61,23 +65,68 @@ func renderSystemMonitoring(ctx RenderContext) RenderResult {
 }
 
 func renderAgentWorkflows(ctx RenderContext) RenderResult {
-	project := ctx.Config.Project
-	if project == "" {
-		project = "stakeholder"
-	}
-	return RenderResult{
-		Message: fmt.Sprintf("agent_workflows smoke evidence: %s handoff loop completed under %d seed", project, ctx.Config.Seed),
-		Evidence: []string{
-			"dedicated-smoke",
-			"traceability-linked",
-			"rust-stakeholder",
-			"stakeholder-core",
-		},
-		Notes: []string{
-			"family-specific renderer",
-			"modern-core smoke path",
-		},
-	}
+	return dedicatedDepthResult(
+		ctx,
+		"agent_workflows",
+		"routing coding-agent work through review queues and approval gates",
+		"coordinationMode",
+		"delegated agent work, approval gates, and cross-repo handoff envelopes",
+		"modern-core dedicated path",
+		"src/generators/agent_workflows.rs",
+		"src/main/java/com/stakeholder/generators/AgentWorkflowsRenderer.java",
+	)
+}
+
+func renderPlatformEngineering(ctx RenderContext) RenderResult {
+	return dedicatedDepthResult(
+		ctx,
+		"platform_engineering",
+		"lining up golden paths, identity federation, queue ownership, and paved-road rollouts across the platform control plane",
+		"platformSurface",
+		"golden paths, identity boundaries, and queue ownership in the shared platform lane",
+		"modern-core dedicated path",
+		"src/generators/platform_engineering.rs",
+		"src/main/java/com/stakeholder/generators/PlatformEngineeringRenderer.java",
+	)
+}
+
+func renderObservabilityAIRuntime(ctx RenderContext) RenderResult {
+	return dedicatedDepthResult(
+		ctx,
+		"observability_ai_runtime",
+		"correlating inference spans, token burn, GPU saturation, and sandbox denials across the AI runtime",
+		"runtimeSignals",
+		"trace spans, token burn, GPU pressure, and policy denials in one runtime lane",
+		"modern-core dedicated path",
+		"src/generators/observability_ai_runtime.rs",
+		"src/main/java/com/stakeholder/generators/ObservabilityAIRuntimeRenderer.java",
+	)
+}
+
+func renderDeliveryPreviewOps(ctx RenderContext) RenderResult {
+	return dedicatedDepthResult(
+		ctx,
+		"delivery_preview_ops",
+		"coordinating preview deploys, canary health, release flags, and rollback checkpoints under seed control",
+		"deliveryGuardrail",
+		"preview deploys, canaries, release flags, and rollback checkpoints under seed control",
+		"modern-core dedicated path",
+		"src/generators/delivery_preview_ops.rs",
+		"src/main/java/com/stakeholder/generators/DeliveryPreviewOpsRenderer.java",
+	)
+}
+
+func renderSupplyChainSecurity(ctx RenderContext) RenderResult {
+	return dedicatedDepthResult(
+		ctx,
+		"supply_chain_security",
+		"linking attestations, dependency drift, key rotation, and registry trust signals across the supply chain",
+		"supplyChainPosture",
+		"provenance, attestations, dependency drift, and secret exposure in one security lane",
+		"modern-core dedicated path",
+		"src/generators/supply_chain_security.rs",
+		"src/main/java/com/stakeholder/generators/SupplyChainSecurityRenderer.java",
+	)
 }
 
 func smokeResult(ctx RenderContext, family string, note string) RenderResult {
@@ -96,6 +145,31 @@ func smokeResult(ctx RenderContext, family string, note string) RenderResult {
 		Notes: []string{
 			"family-specific renderer",
 			note,
+		},
+	}
+}
+
+func dedicatedDepthResult(ctx RenderContext, family string, detail string, focusKey string, focusValue string, note string, rustPath string, javaPath string) RenderResult {
+	project := ctx.Config.Project
+	if project == "" {
+		project = "stakeholder"
+	}
+	return RenderResult{
+		Message: fmt.Sprintf("%s depth pass for %s: %s. Traceability is anchored to Java, Rust, and stakeholder-core.", family, project, detail),
+		Evidence: []string{
+			"dedicated-depth",
+			"traceability-linked",
+			"rust-stakeholder",
+			"java-stakeholder",
+			"stakeholder-core",
+		},
+		Notes: []string{
+			"family-specific renderer",
+			note,
+			fmt.Sprintf("focusKey=%s", focusKey),
+			fmt.Sprintf("%s=%s", focusKey, focusValue),
+			fmt.Sprintf("rustPath=%s", rustPath),
+			fmt.Sprintf("javaPath=%s", javaPath),
 		},
 	}
 }
