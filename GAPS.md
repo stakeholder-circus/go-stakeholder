@@ -23,7 +23,7 @@
   - `supply_chain_security`
 
 ## Remaining blocker
-- Experimental provider flags are parsed consistently, but the experimental provider runtime is still intentionally not implemented in this follower foundation.
+- Experimental provider runtime is a current open gap in the future live-provider lane.
 - The CLI fails fast with an explicit not-implemented message when experimental provider inputs are supplied.
 
 ## Decision rules

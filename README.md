@@ -2,7 +2,7 @@
 > This repository is part of a Codex-assisted rewrite experiment. All changes are manually reviewed, a human remains in the loop, and missing behavior is tracked explicitly rather than hidden. The project exists for fun, research, language learning, AI agent workflow/planning, interop experiments, and code review testing.
 # go-stakeholder
 
-Go follower implementation through the modern-core wave for the stakeholder rewrite.
+Go is the current validated follower baseline through the modern-core wave for the stakeholder rewrite, with the live-provider lane still open for a later phase.
 
 ## Implemented surface
 - Go modules with standard-library-first runtime code.
@@ -13,7 +13,7 @@ Go follower implementation through the modern-core wave for the stakeholder rewr
 - Normalized JSON session output.
 - Full 2026+ family registry for `--list-values`.
 - Dedicated evidence for `code_analyzer`, `data_processing`, `jargon`, `metrics`, `network_activity`, `system_monitoring`, `agent_workflows`, `platform_engineering`, `observability_ai_runtime`, `delivery_preview_ops`, and `supply_chain_security`.
-- Experimental provider flags are parsed consistently and fail fast with an explicit not-implemented message.
+- Experimental provider flags are parsed consistently and fail fast as the current open gap in the future live-provider lane.
 
 ## Commands
 - `gofmt -l $(find . -name '*.go' -not -path './.git/*')`
@@ -27,7 +27,8 @@ Go follower implementation through the modern-core wave for the stakeholder rewr
 - Deterministic mode is the default.
 - `--seed` and `--output-format` are part of the stable contract.
 - `--list-values` emits the family and config registry as JSON.
-- Experimental provider flags are parsed, but they do not enable runtime provider execution in this follower foundation.
+- Native validation is the fast path on this workstation; Docker remains the portable release gate.
+- Experimental provider flags are parsed, but runtime provider execution remains a current open gap in this lane.
 
 ## Gaps
 - [GAPS.md](GAPS.md)
