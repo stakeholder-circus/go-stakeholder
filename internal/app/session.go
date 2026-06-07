@@ -182,15 +182,48 @@ func traceabilityFor(spec FamilySpec, selection SelectedFamily) []TraceRef {
 			Note:   "follower foundation and smoke evidence",
 		},
 	}
+	if javaPath, rustPath, ok := dedicatedTraceabilityAnchor(spec.Name); ok {
+		base = append(base,
+			TraceRef{
+				Source: "java-stakeholder",
+				Target: spec.Name.String(),
+				Kind:   "depth-anchor",
+				Note:   javaPath,
+			},
+			TraceRef{
+				Source: "rust-stakeholder",
+				Target: spec.Name.String(),
+				Kind:   "family",
+				Note:   rustPath,
+			},
+		)
+	}
 	if spec.Smoke {
 		base = append(base, TraceRef{
 			Source: "stakeholder-core",
 			Target: spec.Name.String(),
 			Kind:   "smoke",
-			Note:   "dedicated smoke evidence",
+			Note:   "dedicated family evidence",
 		})
 	}
 	return base
+}
+
+func dedicatedTraceabilityAnchor(family Family) (javaPath string, rustPath string, ok bool) {
+	switch family {
+	case FamilyAgentWorkflows:
+		return "src/main/java/com/stakeholder/generators/AgentWorkflowsRenderer.java", "src/generators/agent_workflows.rs", true
+	case FamilyPlatformEngineering:
+		return "src/main/java/com/stakeholder/generators/PlatformEngineeringRenderer.java", "src/generators/platform_engineering.rs", true
+	case FamilyObservabilityAIRuntime:
+		return "src/main/java/com/stakeholder/generators/ObservabilityAIRuntimeRenderer.java", "src/generators/observability_ai_runtime.rs", true
+	case FamilyDeliveryPreviewOps:
+		return "src/main/java/com/stakeholder/generators/DeliveryPreviewOpsRenderer.java", "src/generators/delivery_preview_ops.rs", true
+	case FamilySupplyChainSecurity:
+		return "src/main/java/com/stakeholder/generators/SupplyChainSecurityRenderer.java", "src/generators/supply_chain_security.rs", true
+	default:
+		return "", "", false
+	}
 }
 
 func primaryFamilyForDevType(dev DevType) Family {

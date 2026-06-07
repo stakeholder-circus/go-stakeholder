@@ -1,5 +1,3 @@
-# Example outputs
-
 ## Dedicated classic-six smoke examples
 
 ### `code_analyzer`
@@ -44,23 +42,47 @@
 [session.end] deterministic session finished
 ```
 
-## Modern-core dedicated example
+## Modern-core dedicated examples
 
 ### `agent_workflows`
 ```text
 [session.start] deterministic session started
-[activity] agent_workflows smoke evidence: stakeholder handoff loop completed under 17 seed family=agent_workflows group=modern-core renderer=dedicated:agent_workflows trace=rust-stakeholder->stakeholder-core
+[activity] agent_workflows depth pass for stakeholder: routing coding-agent work through review queues and approval gates. Traceability is anchored to Java, Rust, and stakeholder-core. family=agent_workflows group=modern-core renderer=dedicated:agent_workflows trace=rust-stakeholder->stakeholder-core
+[session.end] deterministic session finished
+```
+
+### `platform_engineering`
+```text
+[activity] platform_engineering depth pass for stakeholder: lining up golden paths, identity federation, queue ownership, and paved-road rollouts across the platform control plane. Traceability is anchored to Java, Rust, and stakeholder-core. family=platform_engineering group=modern-core renderer=dedicated:platform_engineering trace=rust-stakeholder->stakeholder-core
+[session.end] deterministic session finished
+```
+
+### `observability_ai_runtime`
+```text
+[activity] observability_ai_runtime depth pass for stakeholder: correlating inference spans, token burn, GPU saturation, and sandbox denials across the AI runtime. Traceability is anchored to Java, Rust, and stakeholder-core. family=observability_ai_runtime group=modern-core renderer=dedicated:observability_ai_runtime trace=rust-stakeholder->stakeholder-core
+[session.end] deterministic session finished
+```
+
+### `delivery_preview_ops`
+```text
+[activity] delivery_preview_ops depth pass for stakeholder: coordinating preview deploys, canary health, release flags, and rollback checkpoints under seed control. Traceability is anchored to Java, Rust, and stakeholder-core. family=delivery_preview_ops group=modern-core renderer=dedicated:delivery_preview_ops trace=rust-stakeholder->stakeholder-core
+[session.end] deterministic session finished
+```
+
+### `supply_chain_security`
+```text
+[activity] supply_chain_security depth pass for stakeholder: linking attestations, dependency drift, key rotation, and registry trust signals across the supply chain. Traceability is anchored to Java, Rust, and stakeholder-core. family=supply_chain_security group=modern-core renderer=dedicated:supply_chain_security trace=rust-stakeholder->stakeholder-core
 [session.end] deterministic session finished
 ```
 
 ## Grouped fallback examples
 
-### `platform_engineering`
+### `knowledge_retrieval`
 ```text
-[activity] modern-core fallback: platform_engineering handled by group:modern-core renderer for workflow and platform sweep family=platform_engineering group=modern-core renderer=group:modern-core trace=rust-stakeholder->stakeholder-core
+[activity] ai-governance fallback: knowledge_retrieval handled by group:ai-governance renderer for model and retrieval sweep family=knowledge_retrieval group=ai-governance renderer=group:ai-governance trace=rust-stakeholder->stakeholder-core
 ```
 
-### `supply_chain_security`
+### `identity_and_trust`
 ```text
-[activity] modern-core fallback: supply_chain_security handled by group:modern-core renderer for workflow and platform sweep family=supply_chain_security group=modern-core renderer=group:modern-core trace=rust-stakeholder->stakeholder-core
+[activity] security-blockchain fallback: identity_and_trust handled by group:security-blockchain renderer for security and chain sweep family=identity_and_trust group=security-blockchain renderer=group:security-blockchain trace=rust-stakeholder->stakeholder-core
 ```
