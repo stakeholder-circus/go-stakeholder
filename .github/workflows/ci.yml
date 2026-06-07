@@ -21,10 +21,10 @@ jobs:
         with:
           go-version: "1.22"
       - run: |
-          mapfile -t files < <(find . -name '*.go' -not -path './.git/*' -print)
-          if [ "${#files[@]}" -gt 0 ] && [ -n "$(gofmt -l "${files[@]}")" ]; then
+          files="$(find . -name '*.go' -not -path './.git/*' -print)"
+          if [ -n "$files" ] && [ -n "$(printf '%s\n' "$files" | xargs gofmt -l)" ]; then
             echo "go files require formatting"
-            gofmt -l "${files[@]}"
+            printf '%s\n' "$files" | xargs gofmt -l
             exit 1
           fi
       - run: go vet ./...
