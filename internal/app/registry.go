@@ -1,7 +1,5 @@
 package app
 
-import "strings"
-
 var familyRegistry = []FamilySpec{
 	{Name: FamilyCodeAnalyzer, Group: FamilyGroupClassicSix, Smoke: true, Renderer: "dedicated:code_analyzer"},
 	{Name: FamilyDataProcessing, Group: FamilyGroupClassicSix, Smoke: true, Renderer: "dedicated:data_processing"},
@@ -11,10 +9,10 @@ var familyRegistry = []FamilySpec{
 	{Name: FamilySystemMonitoring, Group: FamilyGroupClassicSix, Smoke: true, Renderer: "dedicated:system_monitoring"},
 	{Name: FamilyAgentWorkflows, Group: FamilyGroupModernCore, Smoke: true, Renderer: "dedicated:agent_workflows"},
 	{Name: FamilyAIInferenceOps, Group: FamilyGroupAIGovernance, Smoke: false, Renderer: "group:ai-governance"},
-	{Name: FamilyPlatformEngineering, Group: FamilyGroupModernCore, Smoke: false, Renderer: "group:modern-core"},
-	{Name: FamilySupplyChainSecurity, Group: FamilyGroupModernCore, Smoke: false, Renderer: "group:modern-core"},
-	{Name: FamilyObservabilityAIRuntime, Group: FamilyGroupModernCore, Smoke: false, Renderer: "group:modern-core"},
-	{Name: FamilyDeliveryPreviewOps, Group: FamilyGroupModernCore, Smoke: false, Renderer: "group:modern-core"},
+	{Name: FamilyPlatformEngineering, Group: FamilyGroupModernCore, Smoke: true, Renderer: "dedicated:platform_engineering"},
+	{Name: FamilySupplyChainSecurity, Group: FamilyGroupModernCore, Smoke: true, Renderer: "dedicated:supply_chain_security"},
+	{Name: FamilyObservabilityAIRuntime, Group: FamilyGroupModernCore, Smoke: true, Renderer: "dedicated:observability_ai_runtime"},
+	{Name: FamilyDeliveryPreviewOps, Group: FamilyGroupModernCore, Smoke: true, Renderer: "dedicated:delivery_preview_ops"},
 	{Name: FamilyEvaluationAndGuardrails, Group: FamilyGroupAIGovernance, Smoke: false, Renderer: "group:ai-governance"},
 	{Name: FamilyKnowledgeRetrieval, Group: FamilyGroupAIGovernance, Smoke: false, Renderer: "group:ai-governance"},
 	{Name: FamilyEdgeClientRuntime, Group: FamilyGroupHealthProtocol, Smoke: false, Renderer: "group:health-protocol"},
@@ -141,24 +139,6 @@ func experimentalProviders() []string {
 		"openai-consumer",
 	}
 }
-
-func registryFamilyNames() []Family {
-	out := make([]Family, len(familyRegistry))
-	for i, spec := range familyRegistry {
-		out[i] = spec.Name
-	}
-	return out
-}
-
-func containsFamily(list []Family, needle Family) bool {
-	for _, item := range list {
-		if item == needle {
-			return true
-		}
-	}
-	return false
-}
-
 func containsString(list []string, needle string) bool {
 	for _, item := range list {
 		if item == needle {
@@ -166,8 +146,4 @@ func containsString(list []string, needle string) bool {
 		}
 	}
 	return false
-}
-
-func groupLabel(group FamilyGroup) string {
-	return strings.ReplaceAll(string(group), "-", " ")
 }
