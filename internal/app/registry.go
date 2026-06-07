@@ -1,7 +1,5 @@
 package app
 
-import "strings"
-
 var familyRegistry = []FamilySpec{
 	{Name: FamilyCodeAnalyzer, Group: FamilyGroupClassicSix, Smoke: true, Renderer: "dedicated:code_analyzer"},
 	{Name: FamilyDataProcessing, Group: FamilyGroupClassicSix, Smoke: true, Renderer: "dedicated:data_processing"},
@@ -141,24 +139,6 @@ func experimentalProviders() []string {
 		"openai-consumer",
 	}
 }
-
-func registryFamilyNames() []Family {
-	out := make([]Family, len(familyRegistry))
-	for i, spec := range familyRegistry {
-		out[i] = spec.Name
-	}
-	return out
-}
-
-func containsFamily(list []Family, needle Family) bool {
-	for _, item := range list {
-		if item == needle {
-			return true
-		}
-	}
-	return false
-}
-
 func containsString(list []string, needle string) bool {
 	for _, item := range list {
 		if item == needle {
@@ -166,8 +146,4 @@ func containsString(list []string, needle string) bool {
 		}
 	}
 	return false
-}
-
-func groupLabel(group FamilyGroup) string {
-	return strings.ReplaceAll(string(group), "-", " ")
 }
