@@ -37,6 +37,24 @@ func TestListValuesIncludesFullRegistry(t *testing.T) {
 	if !containsString(catalog.Experimental.Provider, "claude-consumer") {
 		t.Fatalf("experimental provider registry missing claude-consumer")
 	}
+	expectedDedicated := map[Family]string{
+		FamilyPlatformEngineering:    "dedicated:platform_engineering",
+		FamilyObservabilityAIRuntime: "dedicated:observability_ai_runtime",
+		FamilyDeliveryPreviewOps:     "dedicated:delivery_preview_ops",
+		FamilySupplyChainSecurity:    "dedicated:supply_chain_security",
+	}
+	for _, spec := range catalog.Families {
+		renderer, ok := expectedDedicated[spec.Name]
+		if !ok {
+			continue
+		}
+		if spec.Renderer != renderer {
+			t.Fatalf("expected %s renderer %q, got %q", spec.Name, renderer, spec.Renderer)
+		}
+		if !spec.Smoke {
+			t.Fatalf("expected %s smoke flag to be true", spec.Name)
+		}
+	}
 }
 
 func TestCodeAnalyzerSmokeEvidence(t *testing.T) {
@@ -128,11 +146,63 @@ func TestAgentWorkflowsSmokeEvidence(t *testing.T) {
 	if !strings.Contains(output, FamilyAgentWorkflows.String()) {
 		t.Fatalf("expected agent_workflows output, got %q", output)
 	}
-	if !strings.Contains(output, "agent_workflows smoke evidence") {
-		t.Fatalf("expected dedicated smoke evidence message, got %q", output)
+	if !strings.Contains(output, "agent_workflows depth pass") {
+		t.Fatalf("expected dedicated depth message, got %q", output)
 	}
 	if !strings.Contains(output, "rust-stakeholder") || !strings.Contains(output, "stakeholder-core") {
 		t.Fatalf("expected traceability markers, got %q", output)
+	}
+}
+
+func TestModernCoreDedicatedRenderers(t *testing.T) {
+	cases := []struct {
+		name          string
+		family        Family
+		dev           DevType
+		focusKey      string
+		focusValue    string
+		javaAnchor    string
+		detailSnippet string
+	}{
+		{name: "agent_workflows", family: FamilyAgentWorkflows, dev: DevTypeFullStack, focusKey: "coordinationMode", focusValue: "delegated agent work, approval gates, and cross-repo handoff envelopes", javaAnchor: "src/main/java/com/stakeholder/generators/AgentWorkflowsRenderer.java", detailSnippet: "routing coding-agent work through review queues and approval gates"},
+		{name: "platform_engineering", family: FamilyPlatformEngineering, dev: DevTypeDevOps, focusKey: "platformSurface", focusValue: "golden paths, identity boundaries, and queue ownership in the shared platform lane", javaAnchor: "src/main/java/com/stakeholder/generators/PlatformEngineeringRenderer.java", detailSnippet: "lining up golden paths, identity federation, queue ownership, and paved-road rollouts"},
+		{name: "observability_ai_runtime", family: FamilyObservabilityAIRuntime, dev: DevTypeSystemsProgramming, focusKey: "runtimeSignals", focusValue: "trace spans, token burn, GPU pressure, and policy denials in one runtime lane", javaAnchor: "src/main/java/com/stakeholder/generators/ObservabilityAIRuntimeRenderer.java", detailSnippet: "correlating inference spans, token burn, GPU saturation, and sandbox denials"},
+		{name: "delivery_preview_ops", family: FamilyDeliveryPreviewOps, dev: DevTypeGameDevelopment, focusKey: "deliveryGuardrail", focusValue: "preview deploys, canaries, release flags, and rollback checkpoints under seed control", javaAnchor: "src/main/java/com/stakeholder/generators/DeliveryPreviewOpsRenderer.java", detailSnippet: "coordinating preview deploys, canary health, release flags, and rollback checkpoints"},
+		{name: "supply_chain_security", family: FamilySupplyChainSecurity, dev: DevTypeSecurity, focusKey: "supplyChainPosture", focusValue: "provenance, attestations, dependency drift, and secret exposure in one security lane", javaAnchor: "src/main/java/com/stakeholder/generators/SupplyChainSecurityRenderer.java", detailSnippet: "linking attestations, dependency drift, key rotation, and registry trust signals"},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := renderFamily(RenderContext{
+				Config: Config{DevType: tc.dev},
+				Family: tc.family,
+				Spec:   FamilySpecFor(tc.family),
+			})
+			if !strings.Contains(result.Message, tc.detailSnippet) {
+				t.Fatalf("expected modern-core detail for %s, got %q", tc.family, result.Message)
+			}
+			if !strings.Contains(result.Message, "Traceability is anchored to Java, Rust, and stakeholder-core.") {
+				t.Fatalf("expected traceability sentence for %s, got %q", tc.family, result.Message)
+			}
+			if !containsString(result.Evidence, "dedicated-depth") {
+				t.Fatalf("expected dedicated-depth evidence for %s, got %v", tc.family, result.Evidence)
+			}
+			if !containsString(result.Evidence, "java-stakeholder") {
+				t.Fatalf("expected java-stakeholder evidence for %s, got %v", tc.family, result.Evidence)
+			}
+			if !containsString(result.Notes, "modern-core dedicated path") {
+				t.Fatalf("expected modern-core note for %s, got %v", tc.family, result.Notes)
+			}
+			if !containsString(result.Notes, "focusKey="+tc.focusKey) {
+				t.Fatalf("expected focus key note for %s, got %v", tc.family, result.Notes)
+			}
+			if !containsString(result.Notes, tc.focusKey+"="+tc.focusValue) {
+				t.Fatalf("expected focus value note for %s, got %v", tc.family, result.Notes)
+			}
+			if !containsString(result.Notes, "javaPath="+tc.javaAnchor) {
+				t.Fatalf("expected java anchor note for %s, got %v", tc.family, result.Notes)
+			}
+		})
 	}
 }
 
@@ -178,10 +248,10 @@ func TestExperimentalFlagsFailFast(t *testing.T) {
 func TestGroupedFallbackRenderer(t *testing.T) {
 	result := renderFamily(RenderContext{
 		Config: Config{DevType: DevTypeDevOps},
-		Family: FamilyPlatformEngineering,
-		Spec:   FamilySpecFor(FamilyPlatformEngineering),
+		Family: FamilyAIInferenceOps,
+		Spec:   FamilySpecFor(FamilyAIInferenceOps),
 	})
-	if !strings.Contains(result.Message, "modern-core fallback") {
+	if !strings.Contains(result.Message, "ai-governance fallback") {
 		t.Fatalf("expected grouped fallback message, got %q", result.Message)
 	}
 	if !containsString(result.Evidence, "grouped-fallback") {
