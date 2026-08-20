@@ -19,7 +19,7 @@ jobs:
           submodules: recursive
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.22"
+          go-version: "1.23.x"
       - run: |
           files="$(find . -name '*.go' -not -path './.git/*' -print)"
           if [ -n "$files" ] && [ -n "$(printf '%s\n' "$files" | xargs gofmt -l)" ]; then
